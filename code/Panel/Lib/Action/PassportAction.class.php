@@ -2,7 +2,7 @@
 /**
  * 通行证 控制器类
  * @author 蔡繁荣
- * @version 1.0.9 build 20171012
+ * @version 1.0.10 build 20171018
  */
 class PassportAction extends Action{
 
@@ -143,7 +143,9 @@ class PassportAction extends Action{
                 import('@.ORG.Util.RemeberMe');
                 RemeberMe::set('remeber_me', $user['id'], 3600*24*10);
             }
-            $url = $referer_url ? $referer_url : U('Event/index');
+            // 第一次登录，跳转到添加应用页面
+            $default_url = ($user['last_login_time'] == 0) ? U('App/add') : U('Event/index');
+            $url = $referer_url ? $referer_url : $default_url;
             $this->success('登录成功', $url);
         }
         
