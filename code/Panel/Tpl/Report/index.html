@@ -59,8 +59,8 @@
                             <span class="text-muted">告警数</span>
                         </div>
                         <div class="col-xs-3" style="border-right: 1px solid #e6e6e6;">
-                            <h4>--</h4>
-                            <span class="text-muted">点击率</span>
+                            <h4 id="total_apps">0</h4>
+                            <span class="text-muted">应用数</span>
                         </div>
                         <div class="col-xs-3">
                             <h4>￥0.00</h4>
@@ -283,6 +283,7 @@
                         var stats = json.data.stats;
                         $("#total_events").text(stats['total_events']);
                         $("#total_counts").text(stats['total_counts']);
+                        $("#total_apps").text(stats['total_apps']);
 
 
                         // 2. 渲染charts报表

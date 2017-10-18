@@ -77,6 +77,7 @@ EOF;
 
             $total_events = 0;
             $total_counts = 0;
+            $total_apps   = 0;
             if($data_list){ // 有可能存在，也可能不存在数据
                 foreach($data_list as $rs){
                     $y_data_map[$rs['days']] = $rs;
@@ -85,6 +86,12 @@ EOF;
                     $total_counts += $rs['counts'];
                 }
             }
+            $cond = array(
+                'user_id'    => $this->_user['id'],
+                'is_deleted' => 0,
+            );
+            $total_apps = D('App')->where($cond)->count();
+
 
             $day_list = ChartsUtil::generate_day_list($begin_date, $end_date);
             foreach ($day_list as $x_rs) {
@@ -104,6 +111,7 @@ EOF;
                 'stats' => array(
                     'total_events' => intval($total_events),
                     'total_counts' => intval($total_counts),
+                    'total_apps'   => intval($total_apps),
                 ),
                 'list' => array_values($y_data_map)
             );
@@ -165,7 +173,7 @@ EOF;
 
             $total_events = 0;
             $total_counts = 0;
-
+            $total_apps   = 0;
 
             if($data_list){ // 有可能存在，也可能不存在数据
                 foreach($data_list as $rs){
@@ -175,6 +183,11 @@ EOF;
                     $total_counts += $rs['counts'];
                 }
             }
+            $cond = array(
+                'user_id'    => $this->_user['id'],
+                'is_deleted' => 0,
+            );
+            $total_apps = D('App')->where($cond)->count();
 
 
             // 对数据进行安全验证，没有数据，则用0进行填补
@@ -215,6 +228,7 @@ EOF;
                 'stats' => array(
                     'total_events' => intval($total_events),
                     'total_counts' => intval($total_counts),
+                    'total_apps'   => intval($total_apps),
                 ),
                 'list' => array_values($y_data_map),
                 'app_list' => $app_report_list,
