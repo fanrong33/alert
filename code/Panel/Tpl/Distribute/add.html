@@ -32,14 +32,14 @@
                         <div class="form-group">
                             <label class="col-xs-2 control-label font-thin">触发应用</label>
                             <div class="col-xs-4">
-                                <input type="text" class="form-control" name="trigger_app" value="{$model['trigger_app']}" required/>
+                                <input type="text" class="form-control" name="trigger_app" placeholder="请输入触发应用名称" value="{$model['trigger_app']}" required/>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-xs-2 control-label font-thin">触发告警级别</label>
                             <div class="col-xs-4">
                                 <input type="text" class="form-control" name="trigger_priority" value="{$model['trigger_priority']}" required />
-                                <p class="help-block">如123，表示全部级别都提醒</p>
+                                <p class="help-block">1-提醒，2-警告，3-严重，如123，表示全部级别都提醒</p>
                             </div>
                         </div>
                         <div class="form-group">
@@ -53,8 +53,8 @@
                         <div class="form-group">
                             <label class="col-xs-2 control-label font-thin">分派给</label>
                             <div class="col-xs-4">
-                                <input type="text" class="form-control" name="assign" value="{$model['assign']}" required/>
-                                <p class="help-block">分派给以下用户，以英文逗号分隔</p>
+                                <input type="text" class="form-control" name="assign" placeholder="例如：李雷,韩梅梅" value="{$model['assign']}" required/>
+                                <p class="help-block">分派给以下成员，以英文逗号分隔</p>
                             </div>
                         </div>
 

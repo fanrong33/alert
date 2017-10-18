@@ -2,7 +2,7 @@
 /**
  * 应用管理 控制器类
  * @author 蔡繁荣
- * @version  1.0.5 build 20170928
+ * @version  1.0.6 build 20171018
  */
 class AppAction extends CommonAction{
 
@@ -131,6 +131,27 @@ class AppAction extends CommonAction{
 
             $insert_id = $model->add($data);
             if($insert_id){
+
+
+                // 应用添加成功后，默认添加一个分派策略，通知创建者
+                $cond = array(
+                    'user_id'    => $this->_user['id'],
+                    'is_deleted' => 0,
+                );
+                $member = D('Member')->where($cond)->order('id asc')->find();
+                $distribute_data = array(
+                    'user_id'          => $this->_user['id'],
+                    'name'             => $data['name'].'-默认策略',
+                    'trigger_app'      => $insert_id,
+                    'trigger_priority' => 123,
+                    'trigger_content'  => '.*',
+                    'assign'           => $member['id'],
+                    'update_time'      => time(),
+                    'create_time'      => time(),
+                );
+                D('Distribute')->add($distribute_data);
+
+
                 $this->success('添加成功', U('App/index').'#item_'.$insert_id); // 跳转由后端控制
             }else{
                 $this->error('添加失败');

@@ -2,7 +2,7 @@
 /**
  * 应用管理 控制器类
  * @author 蔡繁荣
- * @version  1.0.5 build 20170928
+ * @version  1.0.6 build 20171018
  */
 class DistributeAction extends CommonAction{
 
@@ -41,14 +41,14 @@ class DistributeAction extends CommonAction{
             // 展示索引值为人类可以理解的文本
             foreach ($list as $key => $rs) {
                 if($rs['trigger_app']){
-                    $app = cache_get('App', $rs['trigger_app']);
+                    $app = cache_get('App', $rs['trigger_app'], 60);
                     $rs['trigger_app'] = $app['name'];
                 }
                 
                 $pieces = explode(',', $rs['assign']);
                 $assign_list = array();
                 foreach ($pieces as $val) {
-                    $user = cache_get('Member', $val);
+                    $user = cache_get('Member', $val, 60);
                     $assign_list[] = $user['name'];
                 }
                 $rs['assign'] = join(', ', $assign_list);
@@ -80,7 +80,7 @@ class DistributeAction extends CommonAction{
             $_POST['name'] = trim($_POST['name']);
 
             $_validate = array(
-                array('name'            , 'require'   , '名称为空', 1), // 默认正则regex, email, url, integer, number, double
+                array('name'            , 'require', '名称为空', 1), // 默认正则regex, email, url, integer, number, double
                 array('trigger_app'     , 'require', '触发应用为空', 1),
                 array('trigger_priority', 'require', '触发告警级别为空', 1),
                 array('trigger_content' , 'require', '策略描述为空', 1),
@@ -100,6 +100,7 @@ class DistributeAction extends CommonAction{
             $app = D('App')->where($cond)->find();
             $data['trigger_app'] = $app['id'];
 
+            // TODO 严格判断成员是否存在
             $pieces = explode(',', $data['assign']);
             $assign_list = array();
             foreach ($pieces as $val) {
@@ -198,14 +199,14 @@ class DistributeAction extends CommonAction{
 
         // 展示的时候，转化 20001 =》 天气，转化索引值为人类可以理解的文本进行展示
         if($item['trigger_app']){
-            $app = cache_get('App', $item['trigger_app']);
+            $app = cache_get('App', $item['trigger_app'], 60);
             $item['trigger_app'] = $app['name'];
         }
 
         $pieces = explode(',', $item['assign']);
         $assign_list = array();
         foreach ($pieces as $val) {
-            $member = cache_get('Member', $val);
+            $member = cache_get('Member', $val, 60);
             if($member){
                 $assign_list[] = $member['name'];
             }
