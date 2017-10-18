@@ -55,7 +55,7 @@
                                         </td>
                                         <td>{$rs['count']}</td>
                                         <td>
-                                            {:date('Y-m-d H:i:s' ,$rs['create_time'])}
+                                            {:friendly_time_format($rs['create_time'])}
                                         </td>
                                         <td>
                                             <a href="javascript:;" data-toggle="modal" data-target="#slide_modal" data-item-id="{$rs['id']}" data-url="{:U('Event/get_event')}">详情</a>
