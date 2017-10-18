@@ -13,7 +13,7 @@
                 <span>告警</span>
             </a>
         </li>
-        <li class="sidebar-menu-item sidebar-menu-item-has-child  <if condition="in_array(MODULE_NAME, array('App','Distribute'))">active expand</if>">
+        <li class="sidebar-menu-item sidebar-menu-item-has-child  <if condition="in_array(MODULE_NAME, array('App','Distribute','Notification'))">active expand</if>">
             <a class="sidebar-menu-section-title" href="{:U('App/index')}">
                 <i class="glyphicon glyphicon-inbox"></i>
                 <span>配置</span>
@@ -25,6 +25,7 @@
             <ul class="sidebar-child-menu">
                 <li><a href="{:U('App/index')}">应用</a></li>
                 <li><a href="{:U('Distribute/index')}">分派策略</a></li>
+                <li><a href="{:U('Notification/index')}">通知策略</a></li>
             </ul><!-- .sidebar-child-menu -->
         </li><!-- sidebar-menu-item -->
 

@@ -1,0 +1,52 @@
+<include file="Public:header" />
+<body>
+    
+    <include file="Public:nav" />
+    
+    <div class="page-container">
+        <div class="page-content">
+
+            <ul class="page-breadcrumb">
+                <li><a href="/">首页</a></li>
+                <span>/</span>
+                <li class="active">告警通知策略</li>
+            </ul><!-- .page-breadcrumb -->
+
+
+            <div class="list-view">
+                <div class="row">
+                    <div class="col-xs-9">
+                        
+                        <div class="panel panel-default">
+                            <div class="panel-heading">告警发生时</div>
+                            <div class="panel-body">
+                                任何时间，所有告警，立刻  邮件通知
+                            </div>
+                        </div>
+                        
+
+                    </div>
+                    <div class="col-xs-3" style="border-left: 1px solid #ddd;">
+                        <p class="text-center">
+                            <i class="glyphicon glyphicon-bell" style="font-size: 35px; color: #0ea6b2;"></i>
+                        </p>
+                        <p style="text-indent: 2em;line-height: 24px;margin-bottom: 20px;">配置告警通知策略，可以让您设置在什么时间，用什么渠道接收告警通知。目前仅支持邮件，未来将接入微信、短信、电话、App等其他渠道方式。</p>
+                    </div>
+                </div>
+            </div><!-- .list-view-->
+
+        
+        </div><!-- .page-content-->
+    </div><!-- .page-container -->
+
+
+    <include file="Public:sidebar" />
+    <include file="Public:footer" />
+    <script>
+    $(document).ready(function(){
+
+
+    });
+    </script>
+</body>
+</html>
