@@ -219,7 +219,7 @@ class PassportAction extends Action{
 
             $json = $client->post($method, $params);
             if($json['status'] == 1){
-                $this->success('重置密码邮件已发送成功，请查收', U('Passport/forget', array('email'=>urlencode($email),'send_success'=>1)));
+                $this->success('重置密码邮件已发送成功，请查收', U('Passport/forget', array('email'=>$email,'send_success'=>1)));
             }else{
                 $this->error('邮件发送失败');
             }
