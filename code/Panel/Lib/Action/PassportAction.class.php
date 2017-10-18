@@ -2,7 +2,7 @@
 /**
  * 通行证 控制器类
  * @author 蔡繁荣
- * @version 1.0.10 build 20171018
+ * @version 1.0.11 build 20171018
  */
 class PassportAction extends Action{
 
@@ -85,6 +85,18 @@ class PassportAction extends Action{
                 'update_time' => time()
             );
             $effect = D('User')->where(array('email'=>$email))->save($data);
+
+
+            // 账号激活成功后，添加本身到成员中
+            $user = D('User')->where(array('email'=>$email))->find();
+            $data = array(
+                'user_id'     => $user['id'],
+                'name'        => $user['username'],
+                'email'       => $email,
+                'update_time' => time(),
+                'create_time' => time(),
+            );
+            $insert_id = D('Member')->add($data);
         }
 
         $this->assign('email', $email);
