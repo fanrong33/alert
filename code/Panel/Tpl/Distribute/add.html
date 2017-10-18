@@ -1,0 +1,86 @@
+<include file="Public:header" />
+<body>
+    
+    <include file="Public:nav" />
+    
+    <div class="page-container">
+        
+        <div class="page-content">
+
+            <ul class="page-breadcrumb">
+                <li><a href="/">首页</a></li>
+                <span>/</span>
+                <li><a href="{:U('Distribute/index')}">分派策略</a></li>
+                <span>/</span>
+                <li class="active"><if condition="$model">编辑策略<else/>添加策略</if></li>
+            </ul><!-- .page-breadcrumb -->
+
+
+            <div class="form-view">
+                
+                 <form class="form-horizontal" id="item_form" action="" method="POST">
+                        <if condition="$model">
+                            <input type="hidden" name="id" value="{$model['id']}">
+                        </if>
+
+                        <div class="form-group">
+                            <label class="col-xs-2 control-label font-thin">策略名称</label>
+                            <div class="col-xs-4">
+                                <input type="text" class="form-control" name="name" placeholder="请输入策略名称" value="{$model['name']}" required autofocus/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-2 control-label font-thin">触发应用</label>
+                            <div class="col-xs-4">
+                                <input type="text" class="form-control" name="trigger_app" value="{$model['trigger_app']}" required/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-2 control-label font-thin">触发告警级别</label>
+                            <div class="col-xs-4">
+                                <input type="text" class="form-control" name="trigger_priority" value="{$model['trigger_priority']}" required />
+                                <p class="help-block">如123，表示全部级别都提醒</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-2 control-label font-thin">触发内容</label>
+                            <div class="col-xs-4">
+                                <input type="text" class="form-control" name="trigger_content" value="{$model['trigger_content']|default='.*'}" required />
+                                <p class="help-block">条件支持正则表达式。如.* &nbsp;&nbsp;<a href="http://tool.chinaz.com/regex/" target="_blank">正则在线测试工具</a></p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="form-group">
+                            <label class="col-xs-2 control-label font-thin">分派给</label>
+                            <div class="col-xs-4">
+                                <input type="text" class="form-control" name="assign" value="{$model['assign']}" required/>
+                                <p class="help-block">分派给以下用户，以英文逗号分隔</p>
+                            </div>
+                        </div>
+
+
+                        
+                        <div class="form-group">
+                            <div class="col-xs-offset-2 col-xs-10">
+                                <button type="submit" class="btn btn-primary" id="primary_btn" data-loading-text="保存中..."><if condition="$model">完成<else/>保存</if></button>
+                                <?php
+                                    $referer_url = $_SERVER['HTTP_REFERER'] ? $_SERVER['HTTP_REFERER'] : U(MODULE_NAME.'/index');
+                                ?>
+                                <input type="hidden" name="referer_url" value="{$referer_url}" />
+                                <a class="btn btn-default" href="{$referer_url}">取消</a>
+                            </div>
+                        </div>
+                        
+                    </form>
+       
+            </div><!-- .form-view-->
+
+        
+        </div><!-- .page-content-->
+    </div><!-- .page-container -->
+
+
+    <include file="Public:sidebar" />
+    <include file="Public:footer" />
+</body>
+</html>

@@ -1,0 +1,54 @@
+<div class="sidebar" id="sidebar">
+    <ul class="sidebar-menu">
+    
+        <li class="sidebar-menu-item">
+            <a class="sidebar-menu-section-title" href="dashboard.html">
+                <i class="glyphicon glyphicon-dashboard"></i>
+                <span>仪表盘</span>
+            </a>
+        </li>
+        <li class="sidebar-menu-item <if condition="in_array(MODULE_NAME, array('Event'))">active expand</if>">
+            <a class="sidebar-menu-section-title" href="{:U('Event/index')}">
+                <i class="glyphicon glyphicon-bell"></i>
+                <span>告警</span>
+            </a>
+        </li>
+        <li class="sidebar-menu-item sidebar-menu-item-has-child  <if condition="in_array(MODULE_NAME, array('App','Distribute'))">active expand</if>">
+            <a class="sidebar-menu-section-title" href="{:U('App/index')}">
+                <i class="glyphicon glyphicon-inbox"></i>
+                <span>配置</span>
+            </a>
+            <em class="sidebar-drop">
+                <i class="glyphicon glyphicon-chevron-right"></i>
+            </em>
+
+            <ul class="sidebar-child-menu">
+                <li><a href="{:U('App/index')}">应用</a></li>
+                <li><a href="{:U('Distribute/index')}">分派策略</a></li>
+            </ul><!-- .sidebar-child-menu -->
+        </li><!-- sidebar-menu-item -->
+
+        <li class="sidebar-menu-item sidebar-menu-item-has-child  <if condition="in_array(MODULE_NAME, array('Report'))">active expand</if> ">
+            <a class="sidebar-menu-section-title" href="{:U('Report/index')}">
+                <i class="glyphicon glyphicon-stats"></i>
+                <span>报告</span>
+            </a>
+            <em class="sidebar-drop">
+                <i class="glyphicon glyphicon-chevron-right"></i>
+            </em>
+
+            <ul class="sidebar-child-menu">
+                <li><a href="{:U('Report/index')}">整体报告</a></li>
+                <li><a href="{:U('Report/app')}">应用报告</a></li>
+            </ul><!-- .sidebar-child-menu -->
+        </li><!-- sidebar-menu-item -->
+
+        <li class="sidebar-menu-item <if condition="in_array(MODULE_NAME, array('Member'))">active expand</if>">
+            <a class="sidebar-menu-section-title" href="{:U('Member/index')}">
+                <i class="glyphicon glyphicon-user"></i>
+                <span>成员</span>
+            </a>
+        </li><!-- sidebar-menu-item -->
+        
+    </ul>
+</div><!-- .sidebar -->

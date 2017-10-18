@@ -1,0 +1,355 @@
+<include file="Public:header" />
+<body>
+    
+    <include file="Public:nav" />
+
+
+    <div class="page-container">
+        <div class="page-content">
+
+            <div style="position: relative;">
+                <ul class="page-breadcrumb">
+                    <li><a href="/">首页</a></li>
+                    <span>/</span>
+                    <li class="active">整体报告</li>
+                </ul><!-- .page-breadcrumb -->
+
+                
+                <div style="position: absolute; right: 15px; top: 8px;">
+                    <div class="dropdown inline-block" id="date_dropdown">
+                        <a class="btn btn-link dropdown-toggle" type="button" id="date_dropdown_menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            最近7天
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="date_dropdown_menu">
+                            <li><a href="javascript:;" data-begin-date="{$today_begin}" data-end-date="{$today_end}">今天</a></li>
+                            <li><a href="javascript:;" data-begin-date="{$yesterday_begin}" data-end-date="{$yesterday_end}">昨天</a></li>
+                            <li><a href="javascript:;" data-begin-date="{$week_begin}" data-end-date="{$week_end}">最近7天</a></li>
+                            <li><a href="javascript:;" data-begin-date="{$month_begin}" data-end-date="{$month_end}">最近30天</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="javascript:;" data-begin-date="{$other_begin}" data-end-date="{$other_end}">其他</a></li>
+                        </ul>
+                    </div>
+                    <div class="inline-block hidden" id="date_input_container" style="vertical-align: middle;">
+                        <div class="inline-block" style="position: relative;">
+                            <input class="form-control" id="begin_date" name="begin_date" value="{$week_begin}" type="text" style="width:120px;display:inline-block;">
+                        </div>
+                        <div class="inline-block" style="position: relative;">
+                            <input class="form-control" id="end_date" name="end_date" value="{$week_end}" type="text" style="width:120px;display:inline-block;">
+                        </div>
+                        <input class="form-control" id="offer_id" name="offer_id" value="{$offer_list[0]['id']}" type="hidden" />
+                        <button class="btn btn-default" type="button" style="vertical-align: middle;" onclick="get_summary_report_list();">查询</button>
+                    </div>
+
+                    <a class="btn btn-link" href="javascript:export_csv();"><i class="glyphicon glyphicon-export"></i> 导出CVS</a>
+                </div>
+            </div>
+
+
+            <div style="padding: 20px 30px 30px;">
+                
+                <div class="container-fluid mb20">
+                    <div class="row" style="background-color: #f7f7f7;border: 1px solid #eee;padding: 20px 0;">
+                        <div class="col-xs-3" style="border-right: 1px solid #e6e6e6;">
+                            <h4 id="total_events">0</h4>
+                            <span class="text-muted">事件数</span>
+                        </div>
+                        <div class="col-xs-3" style="border-right: 1px solid #e6e6e6;">
+                            <h4 id="total_counts">0</h4>
+                            <span class="text-muted">告警数</span>
+                        </div>
+                        <div class="col-xs-3" style="border-right: 1px solid #e6e6e6;">
+                            <h4>--</h4>
+                            <span class="text-muted">点击率</span>
+                        </div>
+                        <div class="col-xs-3">
+                            <h4>￥0.00</h4>
+                            <span class="text-muted">收入</span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div id="chart" class="mb20" style="width:980px;height:300px;"></div><!--  必须设置宽和高 -->
+
+                
+                <table class="table table-hover" id="charts_table">
+                    <thead>
+                        <tr>
+                            <th style="width:150px;">时间</th>
+                            <th style="width:120px;">事件数</th>
+                            <th style="width:120px;">告警数</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-center" colspan="10">没有数据</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- <nav class="text-right">
+                    <ul class="pagination" style="margin-top: 0;">{$page}</ul>
+                </nav> -->
+
+
+            </div>
+
+        </div><!-- .page-content -->
+    </div><!-- .page-container -->
+    
+    
+    <include file="Public:sidebar" />
+    <include file="Public:footer" />
+
+    <script src="http://echarts.baidu.com/gallery/vendors/echarts/echarts-all-3.js?_v_=1479966781202"></script>
+    <script src="//cdn.bootcss.com/moment.js/2.17.1/moment-with-locales.min.js"></script><!-- datetimepicker require moment.js -->
+    <script src="//cdn.bootcss.com/bootstrap-datetimepicker/4.17.44/js/bootstrap-datetimepicker.min.js"></script>
+
+    <script>
+        $(document).ready(function(){
+
+            // 默认日志整体报告统计信息
+            get_summary_report_list();
+
+            
+            // 绑定日期下拉菜单点击事件
+            $("#date_dropdown .dropdown-menu").delegate("a", 'click', function(){
+                var date_text  = $(this).text();
+                var begin_date = $(this).data('begin-date');
+                var end_date   = $(this).data('end-date');
+
+
+                $("#date_dropdown_menu").html(date_text+' <span class="caret"></span>');
+
+                $("#begin_date").val(begin_date);
+                $("#end_date").val(end_date);
+
+                if(date_text != '其他'){
+                    get_summary_report_list();
+
+                    $("#date_input_container").addClass('hidden');
+                }else{
+                    $("#date_input_container").removeClass('hidden');
+                }
+            });
+
+            
+
+
+            lang = 'zh';
+            if( lang == 'zh' ){
+                lang = 'zh-CN';
+            }
+
+            $("#begin_date").datetimepicker({
+                locale: lang,
+                format: "YYYY-MM-DD",
+                dayViewHeaderFormat: "YYYY MMMM",
+                useCurrent: true
+            });
+            $("#end_date").datetimepicker({
+                locale: lang,
+                format: "YYYY-MM-DD",
+                dayViewHeaderFormat: "YYYY MMMM",
+                useCurrent: false
+            });
+
+        })
+
+
+        // 第二个参数可以指定前面引入的主题
+        var chart = echarts.init(document.getElementById('chart'), 'macarons');
+        option = {
+            color: [
+                '#66c3f9', '#acdd96', '#ffd155', '#fd2222' // 调色盘颜色列表
+            ],
+            title : {
+                text: '趋势图',
+                // subtext: '纯属虚构'
+                textStyle: {
+                    color: '#555',
+                    fontSize: 14
+                },
+                top: 0
+            },
+            grid: {
+                left: '5%',  // grid 组件离容器左侧的距离
+                right: '4%',
+                bottom: '10%'
+            },
+            tooltip : {
+                trigger: 'axis',
+            },
+            legend: { // 图例组件展现了不同系列的标记(symbol)，颜色和名字。可以通过点击图例控制哪些系列不显示
+                data:['事件','告警'], 
+                x: 'right'
+            },
+            toolbox: {
+                show : false,
+                feature : {
+                    mark : {show: true},
+                    dataView : {show: true, readOnly: false},
+                    magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                    restore : {show: true},
+                    saveAsImage : {show: true}
+                }
+            },
+            xAxis : [
+                {
+                    type : 'category',
+                    boundaryGap : false,
+                    splitLine: { // 坐标轴在 grid 区域中的分隔线 x为垂直方向
+                        show: false 
+                    },
+                    axisLine: { // 坐标轴刻度标签的相关设置
+                        lineStyle: {
+                            color: '#555' 
+                        }
+                    },
+                    data : ["2016-12-01", "2016-12-02", "2016-12-03", "2016-12-04", "2016-12-05", "2016-12-06", "2016-12-07"]
+                }
+            ],
+            yAxis : [
+                {
+                    // name: '降水量',
+                    type : 'value',
+                    splitNumber: 4, // 坐标轴的分割段数
+                    splitLine: { // 坐标轴在 grid 区域中的分隔线
+                        show: true,
+                        lineStyle: {
+                            color: ['#f0f0f0'],
+                            type: 'dashed'
+                        }
+                    },
+                    axisLine: { // 坐标轴刻度标签的相关设置
+                        lineStyle: {
+                            color: '#888'
+                        }
+                    },
+                    boundaryGap: ['0', '15%'] // 坐标轴两边留白策略
+                }
+            ],
+            series : [
+                {
+                    name: '事件',
+                    type: 'line',
+                    symbol: 'emptyCircle',
+                    symbolSize: 3,
+                    showSymbol: true,
+                    smooth: true,
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'top'
+                        }
+                    },
+                    data: [] // 30, 53, 82, 105, 196, 227, 399
+                },
+                {
+                    name: '告警',
+                    type: 'line',
+                    symbol: 'emptyCircle',
+                    symbolSize: 3,
+                    showSymbol: true,
+                    smooth: true,
+                    data: [] // 10, 23, 14, 25, 56, 76, 156
+                }
+            ]
+        };
+        // setTimeout(function(){
+        //     chart.setOption(option);
+        // }, 200);
+
+
+        // 获取整体报告列表
+        function get_summary_report_list(){
+            // 从input:hidden获取过滤筛选数据
+            var begin_date = $("#begin_date").val();
+            var end_date   = $("#end_date").val();
+
+
+            var params = {};
+            params['begin_date'] = begin_date;
+            params['end_date']   = end_date;
+            $.ajax({
+                type: "GET",
+                url: "/report/get_summary_report_list",
+                data: params,
+                dataType: "json",
+                success: function(json){
+                    if(json.status == 1){
+                        // 1. 渲染统计金额
+                        var stats = json.data.stats;
+                        $("#total_events").text(stats['total_events']);
+                        $("#total_counts").text(stats['total_counts']);
+
+
+                        // 2. 渲染charts报表
+                        var x_list    = new Array; // days 日期
+                        var y_series1 = new Array;
+                        var y_series2 = new Array;
+                        for(var i in json.data.list){
+                            var day   = json.data.list[i]['days'];
+                            x_list.push(day);
+                            y_series1.push(json.data.list[i]['events']);
+                            y_series2.push(json.data.list[i]['counts']);
+                        }
+
+                        option['xAxis'][0]['data']  = x_list;
+                        option['series'][0]['data'] = y_series1;
+                        option['series'][1]['data'] = y_series2;
+
+                        chart.setOption(option);
+
+
+                        // 3. 渲染表格数据
+                        var html = template.render('tpl_charts_table_list', {
+                            list: json.data.list
+                        });
+
+                        $("#charts_table").html(html);
+
+                    }else{
+                        toastr.error(json.info);
+                    }
+                },
+                error: function(){
+
+                }
+            });
+        }
+
+        function export_csv() {
+            var begin_date = $("#begin_date").val();
+            var end_date   = $("#end_date").val();
+
+            window.location.href = "{:U('Report/export_summary_cvs')}?begin_date="+begin_date+"&end_date="+end_date+"&t="+Date.parse(new Date());
+        }
+    </script>
+
+    <!-- 报告表格模板 -->
+    <script id="tpl_charts_table_list" type="text/template">
+        <thead>
+            <tr>
+                <th style="width:150px;">时间</th>
+                <th style="width:120px;">事件数</th>
+                <th style="width:120px;">告警数</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% if(list.length > 0){ %>
+                <% for(var i=0; i<list.length; i++){ %>
+                <tr>
+                    <td><%= list[i]['days'] %></td>
+                    <td><%= list[i]['events'] %></td>
+                    <td><%= list[i]['counts'] %></td>
+                </tr>
+                <% } %>
+            <% }else{ %>
+                <tr><td class="text-center" colspan="10">暂无数据</td></tr>
+            <% } %>
+        </tbody>
+    </script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<include file="Public:header" />
+<body>
+    
+    <include file="Public:nav" />
+    
+    <div class="page-container">
+        <div class="page-content">
+
+            <ul class="page-breadcrumb">
+                <li><a href="/">首页</a></li>
+                <span>/</span>
+                <li><a href="{:U('App/index')}">应用</a></li>
+                <span>/</span>
+                <li class="active"><if condition="$model">编辑应用<else/>添加应用</if></li>
+            </ul><!-- .page-breadcrumb -->
+
+
+            <div class="form-view">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xs-9">
+                            <form class="form-horizontal" id="item_form" action="" method="POST">
+                                <if condition="$model">
+                                    <input type="hidden" name="id" value="{$model['id']}">
+                                </if>
+
+                                <div class="form-group">
+                                    <label class="col-xs-2 control-label">应用名称：</label>
+                                    <div class="col-xs-5">
+                                        <input type="text" class="form-control" name="name" placeholder="请输入应用名称" value="{$model['name']}" required autofocus/>
+                                    </div>
+                                </div>
+                                <if condition="$model">
+                                <div class="form-group">
+                                    <label class="col-xs-2 control-label">app_key：</label>
+                                    <div class="col-xs-5">
+                                        <input type="text" class="form-control j-clipboard" id="app_key" value="{$model['app_key']}" readonly="" data-clipboard-target="#app_key" onblur="reset_clip_help(this)">
+                                        <div class="help-block mb0">Click to copy</div>
+                                    </div>
+                                </div>
+                                </if>
+
+                                <div class="form-group">
+                                    <div class="col-xs-offset-2 col-xs-10">
+                                        <button type="submit" class="btn btn-primary" id="primary_btn" data-loading-text="保存中..."><if condition="$model">完成<else/>保存</if></button>
+                                        <?php
+                                            $referer_url = $_SERVER['HTTP_REFERER'] ? $_SERVER['HTTP_REFERER'] : U(MODULE_NAME.'/index');
+                                        ?>
+                                        <input type="hidden" name="referer_url" value="{$referer_url}" />
+                                        <a class="btn btn-default" href="{$referer_url}">取消</a>
+                                    </div>
+                                </div>
+                                
+                            </form>
+                            <hr/>
+                            <h5>API 接口</h5>
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <th>接口</th>
+                                        <td colspan="2">http://api.alert.fanrong33.com/event/add_event</td>
+                                    </tr>
+                                    <tr>
+                                        <th>调用方式</th>
+                                        <td colspan="2">POST</td>
+                                    </tr>
+                                    <tr>
+                                        <th>参数</th>
+                                        <th>是否必须</th>
+                                        <th>描述</th>
+                                    </tr>
+                                    <tr>
+                                        <td>app_key</td>
+                                        <td>必须</td>
+                                        <td>需要告警集成的应用KEY</td>
+                                    </tr>
+                                    <tr>
+                                        <td>title</td>
+                                        <td>必须</td>
+                                        <td>告警标题，故障简述</td>
+                                    </tr>
+                                    <tr>
+                                        <td>content</td>
+                                        <td>必须</td>
+                                        <td>告警详情</td>
+                                    </tr>
+                                    <tr>
+                                        <td>priority</td>
+                                        <td>必须</td>
+                                        <td>提醒 1，警告 2，严重 3</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                        </div>
+                        <div class="col-xs-3" style="border-left: 1px solid #ddd;">
+                            <p style="text-indent: 2em;line-height: 24px;margin-bottom: 20px;">通过REST API，您可以轻松地把自定义的告警发送到Alert中，自动帮您压缩冗余告警，避免告警风暴，让您更快定位和解决问题。</p>
+                        </div>
+                    </div>
+                </div>
+                
+       
+            </div><!-- .form-view-->
+
+        
+        </div><!-- .page-content-->
+    </div><!-- .page-container -->
+
+
+    <include file="Public:sidebar" />
+    <include file="Public:footer" />
+    <script src="//cdn.bootcss.com/clipboard.js/1.6.0/clipboard.min.js"></script>
+    <script src=""></script>
+    <script>
+    $(document).ready(function(){
+
+        // 绑定input点击事件复制内容到剪切板
+        var clipboard = new Clipboard('.j-clipboard');
+        clipboard.on('success', function(e) {
+
+            $(e.trigger).next().text('Copied text to clipboard');
+            // e.clearSelection();
+        });
+
+
+
+    });
+
+    function reset_clip_help(obj){
+        $(obj).next().text('Click to copy');
+    }
+    </script>
+</body>
+</html>

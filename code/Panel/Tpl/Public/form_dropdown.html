@@ -1,0 +1,25 @@
+<?php
+/* {$is_actived_map[$is_actived]}
+   $dropdown_name 由外部调用的时候传入
+ */
+   if($dropdown_name == '') exit('未定义 dropdown_name 变量');
+?>
+<div class="dropdown inline-block">
+    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 12px;padding-top: 7px;line-height: normal;padding-bottom: 7px;">
+        <?php 
+            $map_name = $dropdown_name.'_map';
+
+            $map     = $$map_name;      // $is_actived_map = array(''=>'启用状态','0'=>'禁用','1'=>'启用' );
+            $map_key = $$dropdown_name; // 1
+            echo $map[$map_key]; /* {$is_actived_map[$is_actived]} */
+        ?>
+        <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="is_actived_dropdown_menu" style="max-height: 200px;overflow-y: auto;font-size: 12px;">
+        <?php foreach($map as $key => $val){ ?>
+            <li><a href="javascript:;" data-value={$key}>{$val}</a></li>
+        <?php } ?>
+    </ul>
+
+    <input type="hidden" id="{$dropdown_name}" name="{$dropdown_name}" value="<?php echo $map_key; ?>" />
+</div>

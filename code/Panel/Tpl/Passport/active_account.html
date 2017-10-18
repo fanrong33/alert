@@ -1,0 +1,78 @@
+<include file="Public:header" />
+<style>
+    body{
+        background-color: #f5f5f5;
+    }
+</style>
+<body><!-- action: .navigator-collapse -->
+    
+    <nav class="navbar navbar-mars" role="navigation">
+        <div class="container">
+
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/"><img src="{:IMAGES_PATH}alert_logo.svg" alt="" height="30px"></a>
+            </div>
+            
+            <ul class="nav navbar-nav navbar-right">
+                <li><a class="btn-ghost" href="{:U('Passport/login')}">登录</a></li>
+            </ul>
+            
+        </div><!-- /.container-fluid -->
+    </nav>
+
+    <div class="container">
+        <div class="row">
+
+            <div class="col-sm-12 col-md-9"><!-- -->
+
+                <div class="panel-view mt20">
+                    
+                    <div class="panel panel-default">
+                        <div class="panel-body" style="padding: 50px 50px 60px;">
+                                
+                            <if condition="$email">
+                                <!-- 验证码激活成功 -->
+                                <div class="msg msg-success">
+                                    <div class="msg-left">
+                                        <i class="iconfont icon-success"></i>
+                                    </div>
+                                    <div class="msg-body">
+                                        <h4>恭喜您，账号激活成功！</h4>
+                                        <p><i class="glyphicon glyphicon-envelope"></i> {$email}</p>
+                                        <p>忘记密码或丢失账号可通过您的邮箱地址找回 <a href="{:U('Passport/login')}?email={$email}">立即登录</a></p>
+                                    </div>
+                                </div>
+                            <else/>
+                                <!-- 验证码失效激活失败 -->
+                                <div class="msg msg-warn">
+                                    <div class="msg-left">
+                                        <i class="iconfont icon-warn"></i>
+                                    </div>
+                                    <div class="msg-body">
+                                        <h4>邮箱验证失败</h4>
+                                        <p>此链接已失效，如30分钟内没有激活则需要重新注册，返回<a href="{:U('Passport/register')}">重新注册</a></p>
+                                    </div>
+                                </div>
+                            </if>
+                            
+                        </div>
+                    </div>
+
+
+                </div><!-- .panel-view -->
+
+            </div>
+        </div>
+    </div>
+
+    <footer>© {:date('Y')} alert 版权所有</footer>
+    <include file="Public:footer" />
+    
+    <script>
+        $(document).ready(function(){
+
+        });
+    </script>
+</body>
+</html>

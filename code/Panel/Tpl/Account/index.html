@@ -1,0 +1,160 @@
+<include file="Public:header" />
+<body>
+    
+    <include file="Public:nav" />
+
+    <div class="page-container">
+        <div class="page-content">
+
+            <ul class="page-breadcrumb">
+                <li><a href="/">首页</a></li>
+                <span>/</span>
+                <li class="active">账号信息</li>
+            </ul>
+
+
+            <div class="form-view">
+                
+                <form class="form-horizontal" id="item_form" method="post" role="form">
+                    <div class="h5" style="padding-left: 5px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #555;">基本信息</div>
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-xs-2 control-label">用户名：</label>
+                        <div class="col-xs-3 pl0">
+                            <p class="form-control-static">{$model['username']}</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="col-xs-2 control-label">密码：</label>
+                        <div class="col-xs-3 pl0">
+                            <p class="form-control-static">****** &nbsp;&nbsp;<a href="#" data-toggle="modal" data-target="#myModal">修改密码</a></p>
+                        </div>
+                    </div>
+
+                    <div class="h5" style="padding-left: 5px;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    color: #555;">会员信息</div>
+                    <div class="form-group">
+                        <label for="" class="col-xs-2 control-label">联系人姓名：</label>
+                        <div class="col-xs-3 pl0">
+                            <input type="text" class="form-control" id="" name="name" value="{$model['name']}" placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="col-xs-2 control-label">邮箱地址：</label>
+                        <div class="col-xs-3 pl0">
+                            <span class="text-required">*</span>
+                            <input type="email" class="form-control" id="" name="email" value="{$model['email']}" placeholder="" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="col-xs-2 control-label">手机：</label>
+                        <div class="col-xs-3 pl0">
+                            <input type="text" class="form-control" id="" name="mobile" value="{$model['mobile']}" placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="col-xs-2 control-label">联系地址：</label>
+                        <div class="col-xs-3 pl0">
+                            <input type="text" class="form-control" id="" name="address" value="{$model['address']}" placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="col-xs-2 control-label">邮编：</label>
+                        <div class="col-xs-3 pl0">
+                            <input type="text" class="form-control" id="" name="postcode" value="{$model['postcode']}" placeholder="">
+                        </div>
+                    </div>
+                    
+
+                    <div class="form-submit-section">
+                        <button type="submit" class="btn btn-primary" id="primary_btn" data-loading-text="保存中...">保存</button>
+                        <button type="reset" class="btn btn-link">重置</button>
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
+        
+        
+    </div><!-- .page-container -->
+
+
+    <include file="Public:sidebar" />
+    <include file="Public:footer" /><!-- 包含js等 -->
+    
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <form class="form-horizontal" id="edit_password_form" action="/account/edit_password.html" method="post" role="form">
+        <div class="modal-dialog" style="margin-top: 100px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel">修改密码</h4>
+                </div>
+                <div class="modal-body">
+                    
+                        <div class="form-group">
+                            <label for="" class="col-sm-3 control-label">当前密码：</label>
+                            <div class="col-sm-7">
+                                <input type="password" class="form-control" name="current_password" placeholder="请输入当前密码" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-3 control-label">新的密码：</label>
+                            <div class="col-sm-7">
+                                <input type="password" class="form-control" name="new_password" placeholder="请输入6-20位新密码" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-3 control-label">确认密码：</label>
+                            <div class="col-sm-7">
+                                <input type="password" class="form-control" name="confirm_password" placeholder="请输入确认密码" required>
+                            </div>
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-primary">保存</button>
+                </div>
+            </div>
+        </div>
+        </form>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+
+            // 绑定修改密码表单提交事件
+            $("#edit_password_form").submit(function(){ // bind submit event
+                $(this).ajaxSubmit({
+                    type: "POST",
+                    dataType: "json",
+                    beforeSubmit: function(){ },
+                    success: function(json){
+                        if(json.status == 1){
+                            toastr.success(json.info);
+
+                            setTimeout(function(){
+                                $('#myModal').modal('hide');
+                                $("#myModal").find('form').get(0).reset();
+                            }, 1000);
+
+                        }else{
+                            toastr.error(json.info);
+                        }
+                    }
+                });
+                return false;
+            });
+
+        });
+    </script>
+</body>
+</html>
