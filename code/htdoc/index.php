@@ -14,9 +14,9 @@ define('VENDOR_PATH', '../ThinkPHP/vendor/');
 
 // 定义资源路径
 define('HTDOC_PATH' , '/');
-define('CSS_PATH'   , '/home/css/');
-define('IMAGES_PATH', '/home/images/');
-define('JS_PATH'    , '/home/js/');
+define('CSS_PATH'   , '/panel/css/');
+define('IMAGES_PATH', '/panel/images/');
+define('JS_PATH'    , '/panel/js/');
 
 // 加载框架入口文件
 require(THINK_PATH."ThinkPHP.php");
