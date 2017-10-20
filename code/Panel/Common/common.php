@@ -412,13 +412,13 @@ function friendly_time_format($timestamp)
         {
             $format = "%H:%M" ;
             $string = strftime ($format , $timestamp );
-            return "今天 { $string}";
+            return "今天 {$string}";
         }
         elseif(($curtimeArray ['yday'] - 1) == $timeArray[ 'yday'])
         {
             $format = "%H:%M" ;
             $string = strftime ($format , $timestamp );
-            return "昨天 { $string}";
+            return "昨天 {$string}";
         }
         else
         {
