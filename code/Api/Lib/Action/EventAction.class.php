@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * 事件接口 控制器类
+ * @author 蔡繁荣
+ * @version 1.0.0 build 20171102
+ */
 class EventAction extends Action{
 
     /**
@@ -49,10 +53,11 @@ class EventAction extends Action{
             
             // 2、添加警告⚠️，如果已存在相同的警告，则count+1，10分钟之内不重复提醒，TODO 机器学习最优时间
             $cond = array(
-                'app_id'   => $data['app_id'],
-                'title'    => $data['title'],
-                'content'  => $data['content'],
-                'priority' => $data['priority'],
+                'app_id'     => $data['app_id'],
+                'title'      => $data['title'],
+                'content'    => $data['content'],
+                'priority'   => $data['priority'],
+                'is_deleted' => 0,
             );
             $event = D('Event')->where($cond)->order('id desc')->find();
             if($event && $event['alert_time']+60*10 > $now){ // 10分钟内，则不重复提醒
